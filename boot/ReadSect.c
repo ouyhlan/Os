@@ -11,6 +11,7 @@ int inp(int port) {
     );
     return res;
 }
+
 void outp(int port, int info) {
     asm(    "movl %0, %%edx\n\t"
             "movl %1, %%eax\n\t"
@@ -33,61 +34,12 @@ void insl(short port, void *des, unsigned long long len) {
     );
 }
 
-typedef struct CurPosition {
-    int x, y;
-} CurPosition;
-
-CurPosition GetCurPos() {
-    unsigned short temp = 0;
-    CurPosition res;
-    outp(0x3d4, 14);
-    temp = (inp(0x3d5) & 0xff) << 8;     /* 光标位置高八位 */
-    outp(0x3d4, 15);
-    temp += inp(0x3d5);     /* 光标位置低八位 */
-    res.x = temp % 80; 
-    res.y = temp / 80;
-    return res;
-}
-
-void SetCurPos(CurPosition point_pos) {
-    unsigned short pos = point_pos.y * 80 + point_pos.x;
-    outp(0x3d4, 14);
-    outp(0x3d5, (pos >> 8) & 0xff);     /* 设置光标高八位 */
-    
-    outp(0x3d4, 15);
-    outp(0x3d5, pos & 0xff);            /* 设置光标低八位 */
-
-}
-
-void putc(char c) {
-    unsigned char *vga_addr = 0xb8000;
-    CurPosition cur_pos = GetCurPos();
-    if (c == '\n') {
-        cur_pos.x = 0;                  /* 回车 */
-        ++cur_pos.y;                    /* 换行 */
-    }
-    else {
-        unsigned int ch_pos = (cur_pos.y * 80 + cur_pos.x) << 1;
-        vga_addr[ch_pos] = c;
-        vga_addr[ch_pos + 1] = 0x07;
-        ++cur_pos.x;
-    }
-    SetCurPos(cur_pos);
-}
-
-void puts(char *str) {
-    int index = 0;
-    while (str[index] != '\0') {
-        putc(str[index++]);
-    }
-}
-
 void WaitDisk() {
     while ((inp(0x1f7) & 0xC0) != 0x40)
         /* 等待硬盘空闲 */;
 }
 
-void readsect(void *dst, int secno, short num_of_sec) {
+void ReadSect(void *dst, int secno, short num_of_sec) {
     // wait for disk to be ready
     WaitDisk();
 

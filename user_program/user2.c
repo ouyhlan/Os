@@ -1,3 +1,4 @@
+#include "libc.h"
 #define Lmax 40
 #define Rmax 79
 #define Umax 1
@@ -57,7 +58,7 @@ int _start() {
         }
     }
     SetReturnPos();
-    return 0;
+    exit();
 }
 
 /* 显示运动中的字符 */
@@ -147,6 +148,7 @@ void SetReturnPos() {
     outp(0x3d5, pos & 0xff);            /* 设置光标低八位 */
 
     /* 上滚一页 */
+    /*
     for (int i = 0; i < 24 * 80 - 1; ++i) {
         vga_addr[i * 2] = vga_addr[i * 2 + 80 * 2];
         vga_addr[i * 2 + 1] = vga_addr[i * 2 + 1 + 80 * 2];
@@ -154,5 +156,5 @@ void SetReturnPos() {
     for (int i = 24 * 80; i < 25 * 80; ++i) {
         vga_addr[i * 2] = 0x20;
         vga_addr[i * 2 + 1] = 0x30;
-    }
+    }*/
 }

@@ -1,3 +1,4 @@
+#include "libc.h"
 #define Lmax 0
 #define Rmax 39
 #define Umax 13
@@ -11,7 +12,7 @@
 
 char *vga_addr = 0xb8000;
 char ch_disp = 'A';         /* 要显示的字符 */
-short x = 20;       /* 行号 */
+short x = 16;       /* 行号 */
 short y = 0;       /* 列号 */
 unsigned int rdul = Dn_Rt;
 char bg_color = 0x30;
@@ -57,7 +58,7 @@ int _start() {
         }
     }
     SetReturnPos();
-    return 0;
+    exit();
 }
 
 /* 显示运动中的字符 */
@@ -147,6 +148,7 @@ void SetReturnPos() {
     outp(0x3d5, pos & 0xff);            /* 设置光标低八位 */
 
     /* 上滚一页 */
+    /*
     for (int i = 0; i < 24 * 80 - 1; ++i) {
         vga_addr[i * 2] = vga_addr[i * 2 + 80 * 2];
         vga_addr[i * 2 + 1] = vga_addr[i * 2 + 1 + 80 * 2];
@@ -154,5 +156,5 @@ void SetReturnPos() {
     for (int i = 24 * 80; i < 25 * 80; ++i) {
         vga_addr[i * 2] = 0x20;
         vga_addr[i * 2 + 1] = 0x30;
-    }
+    }*/
 }
