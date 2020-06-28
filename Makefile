@@ -8,7 +8,7 @@ LINKFLAGS = --oformat binary
 BOOT1FLAGS = -Ttext 0x7c00
 BOOT2FLAGS = -Ttext 0x7e00
 BOOT3FLAGS = -Ttext 0x8200
-KERNALFLAGS = -Ttext 0xffff800000000000 -Tdata 0xffff800000002000 -Tbss 0xffff800000001c00 -static
+KERNALFLAGS = -Ttext 0xffff800000000000 -Tdata 0xffff800000001600 -Tbss 0xffff800000001300 -static
 USERFLAGS = -Ttext 0x400000 -Tdata 0x400600 -static
 
 output = img/os1.img
