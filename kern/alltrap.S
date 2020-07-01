@@ -2,10 +2,12 @@
 .section .text
 # struct trapframe *save()
 .global save
+.extern system_stack_addr
+
 save:
 .code64
     # 记录调用者的返回地址
-    pop %rbp
+    pop temp_addr
 
     # 保存所有的寄存器
     push %r15
@@ -16,7 +18,7 @@ save:
     push %r10
     push %r9
     push %r8
-    push %rsp    
+    push %rbp    
     push %rdi
     push %rsi
     push %rdx
@@ -27,8 +29,7 @@ save:
     movq %rsp, %rax
 
     # 恢复返回地址
-    push %rbp
-    lea 0x8(%rsp), %rbp
+    push temp_addr
     ret
 
 # void restart()
@@ -45,7 +46,7 @@ restart:
     pop %rdx
     pop %rsi
     pop %rdi
-    pop %rsp
+    pop %rbp
     pop %r8
     pop %r9
     pop %r10
@@ -54,5 +55,7 @@ restart:
     pop %r13
     pop %r14
     pop %r15
-    pop %rbp
+#    pop %rsp
     iretq
+temp_addr:
+    .quad 0

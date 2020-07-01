@@ -15,7 +15,7 @@ void scanf(char *str, ...) {
     for (int i = 0; i < str_len; ++i) {
         if (str[i] == '%') {
             char ch;
-            while ((ch = getchar()) == ' ' || ch == '\n') {  /* 忽略开头的空格 */
+            while ((ch = getchar()) == ' ' || ch == '\n' || ch == '\b') {  /* 忽略开头的空格 */
                 /* do nothing */;
             }
 
@@ -24,8 +24,14 @@ void scanf(char *str, ...) {
                 /* 处理输入 */
                 int dig_pos = 0, num_res = 0;
                 char digit_buf[9] = {0};   /* 一般int只有9位 */
-                for (ch; (ch >= '0' && ch <= '9'); ch = getchar()) {
-                    digit_buf[dig_pos++] = ch;
+                for (ch; (ch >= '0' && ch <= '9') || ch == '\b'; ch = getchar()) {
+                    if (ch == '\b') {
+                        if (dig_pos > 0)
+                            digit_buf[--dig_pos] = '\0';
+                    }
+                    else {
+                        digit_buf[dig_pos++] = ch;
+                    }
                 }
 
                 /* str2int */
@@ -41,7 +47,13 @@ void scanf(char *str, ...) {
                 char *scanf_str = va_arg(ap, char*);
                 int str_pos = 0;
                 for (ch; ch != ' ' && ch != '\n'; ch = getchar()) {
-                    scanf_str[str_pos++] = ch;
+                    if (ch == '\b') {
+                        if (str_pos > 0)
+                            scanf_str[--str_pos] = '\0';
+                    }
+                    else {
+                        scanf_str[str_pos++] = ch;
+                    }
                 }
                 scanf_str[str_pos] = '\0';
             }

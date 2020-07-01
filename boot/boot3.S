@@ -1,7 +1,7 @@
-.set PML4_BASE,             0x100000                # pml-4 base address
+.set PML4_BASE,             0x9000                # pml-4 base address
 .set LONG_MODE_CSEG,        0x8
-.set LONG_MODE_SMEM,        0xffffffffffffffff          
-.set LONG_MODE_SYSM,        0xffff800000000000
+.set LONG_MODE_SMEM,        0x201fffff          
+.set LONG_MODE_SYSM,        0x20101000
 .set KERNEL_SEC,            0x5
 .set NUM_KERNEL_SEC,        0x1b                    # read 16 secs
 
@@ -56,7 +56,7 @@ longseg:
     movq $PML4_BASE, %rax                           # Pointer to Final PML4 table
     movq %rax, %cr3                                 # Initialize CR3 with PML4 base.
     movq $LONG_MODE_SMEM, %rsp                      # Setting Stack
-
+    
     # Loading Kernel Code in
     movq $LONG_MODE_SYSM, %rdi
     movq $KERNEL_SEC, %rsi
@@ -101,4 +101,4 @@ gdt64desc:
     .quad gdt64
 idt64desc:
     .word 0x8000
-    .quad 0x100000
+    .quad 0x2000d000

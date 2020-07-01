@@ -78,7 +78,7 @@ protcseg:
     movw %ax, %ds                                   # -> DS: Data Segment
     movw %ax, %es                                   # -> ES = DS
     movw %ax, %fs                                   # -> FS = DS
-    movw %ax, %ss                                   # -> SS: Stack Segment
+    # movw %ax, %ss                                   # -> SS: Stack Segment
     movw $PROT_MODE_GSEG, %ax                       
     movw %ax, %gs                                   # -> GS = 0xB6000
 

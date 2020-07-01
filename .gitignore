@@ -1,0 +1,6 @@
+# ignore .o file
+*.o
+*/*.o
+
+# ignore test folder
+test

@@ -21,5 +21,5 @@ void putc(char c);
 void puts(char *str);
 void exec(unsigned int sec_no, unsigned int num_of_sec);
 void exit();
-
+void multiexec(uint64_t proc_num, uint32_t *sec_no, uint32_t *num_of_sec);
 #endif
